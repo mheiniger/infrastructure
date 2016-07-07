@@ -41,6 +41,7 @@ rancher:
 
     proxy:
       image: abiosoft/caddy
+      restart: always
       volumes:
         - /etc/Caddyfile:/etc/Caddyfile
         - /tmp/caddy:/root/.caddy
