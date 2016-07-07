@@ -1,8 +1,14 @@
 # Bootstrap Livingdocs Infrastructure
 
+This script installs a rancher master on AWS using terraform.
+Workers where you run your applications get started in rancher itself, not with this script.
+
 ### Bootstrap the infrastucture
 ```bash
-./terraform create:<namespace>
+git clone git@github.com:upfrontIO/infrastructure.git
+cd infrastructure
+# create a config file environments/production/terraform.tfvars
+./terraform create:production
 ```
 
 ### Apply updates
