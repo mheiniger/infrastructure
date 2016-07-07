@@ -41,6 +41,7 @@ create () {
 }
 
 terraform () {
+  checkdocker
   docker run --rm -it -v $envdir:/data -v $root/structure:/structure uzyexe/terraform $@
 }
 
@@ -61,16 +62,13 @@ config () {
 shift
 case "$cmd" in
     create)
-        checkdocker
         create
         apply $args
         ;;
     destroy)
-        checkdocker
         destroy $args
         ;;
     config)
-        checkdocker
         config $args
         ;;
     terraform)
