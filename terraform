@@ -1,0 +1,82 @@
+#!/usr/bin/env bash
+set -e
+
+print_help () {
+  echo "Usage ./terraform <command>:<environment>"
+  echo ""
+  echo "  available commands:"
+  echo "   create    : create the infrastructure"
+  echo "   destroy   : drop the infrastructure"
+  echo "   config    : get the terraform output"
+  echo "   terraform : use the low level terraform methods"
+  echo "   "
+  exit 1
+}
+
+root="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cmd=${1%:*}
+env=${1##*:}
+args="${@:2}"
+envdir=$root/environments/$env
+if [ "$cmd" == "$env" ]
+  then
+  print_help
+fi
+
+checkdocker () {
+  VERSION=$(docker version -f '{{.Server.Version}}')
+  if [[ $VERSION != 1* ]] && [[ $HOST != 2* ]] ;
+  then
+    echo '* This script depends on a running docker server'
+    exit 1
+  fi
+}
+
+create () {
+  if [ ! -f $envdir/keys/rancher ]; then
+    echo "Creating rancher ssh key..."
+    mkdir -p $envdir/keys
+    ssh-keygen -t rsa -f $envdir/keys/rancher -N ''
+  fi
+}
+
+terraform () {
+  docker run --rm -it -v $envdir:/data -v $root/structure:/structure uzyexe/terraform $@
+}
+
+apply () {
+  echo $@
+  terraform apply $@ /structure
+}
+
+destroy () {
+  terraform destroy $@ 0/structure
+}
+
+config () {
+  mkdir -p $envdir
+  terraform output $@
+}
+
+shift
+case "$cmd" in
+    create)
+        checkdocker
+        create
+        apply $args
+        ;;
+    destroy)
+        checkdocker
+        destroy $args
+        ;;
+    config)
+        checkdocker
+        config $args
+        ;;
+    terraform)
+        terraform $args
+        ;;
+    *)
+        print_help
+        ;;
+esac
