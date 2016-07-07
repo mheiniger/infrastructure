@@ -86,7 +86,6 @@ rancher:
     cloudwatch-system:
       image: bradgignac/logspout-cloudwatch:v0.1.3
       restart: always
-      hostname: $HOSTNAME
       command: cloudwatch://rancher-system
       volumes:
         - /var/run/system-docker.sock:/tmp/docker.sock
