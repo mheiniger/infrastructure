@@ -77,9 +77,9 @@ rancher:
         - /var/run/docker.sock:/tmp/docker.sock
 
       environment:
-        AWS_REGION: ${aws_region}
-        AWS_ACCESS_KEY_ID: ${aws_access_key}
-        AWS_SECRET_ACCESS_KEY: ${aws_secret_key}
+        AWS_REGION: ${cloudwatch_aws_region}
+        AWS_ACCESS_KEY_ID: ${cloudwatch_aws_access_key}
+        AWS_SECRET_ACCESS_KEY: ${cloudwatch_aws_secret_key}
 
       labels:
         - io.rancher.os.after=network
@@ -92,9 +92,9 @@ rancher:
         - /var/run/system-docker.sock:/tmp/docker.sock
 
       environment:
-        AWS_REGION: ${aws_region}
-        AWS_ACCESS_KEY_ID: ${aws_access_key}
-        AWS_SECRET_ACCESS_KEY: ${aws_secret_key}
+        AWS_REGION: ${cloudwatch_aws_region}
+        AWS_ACCESS_KEY_ID: ${cloudwatch_aws_access_key}
+        AWS_SECRET_ACCESS_KEY: ${cloudwatch_aws_secret_key}
 
       labels:
         - io.rancher.os.scope=system

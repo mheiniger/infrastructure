@@ -18,6 +18,18 @@ variable "rancher_public_key" {
   type = "string"
 }
 
+variable "cloudwatch_aws_region" {
+  type = "string"
+}
+
+variable "cloudwatch_aws_access_key" {
+  type = "string"
+}
+
+variable "cloudwatch_aws_secret_key" {
+  type = "string"
+}
+
 resource "aws_key_pair" "rancher_key" {
   key_name = "rancher"
   public_key = "${var.rancher_public_key}"
@@ -120,9 +132,9 @@ resource "template_file" "cloud_init" {
       database_password = "${var.rancher_db_password}"
 
       # Monitoring
-      aws_region = "${var.aws_region}"
-      aws_access_key = "${var.aws_access_key}"
-      aws_secret_key = "${var.aws_secret_key}"
+      cloudwatch_aws_region = "${var.cloudwatch_aws_region}"
+      cloudwatch_aws_access_key = "${var.cloudwatch_aws_access_key}"
+      cloudwatch_aws_secret_key = "${var.cloudwatch_aws_secret_key}"
       new_relic_license_key = "${var.new_relic_license_key}"
 
       # Frontend
