@@ -14,9 +14,13 @@ variable "new_relic_license_key" {
   type = "string"
 }
 
+variable "rancher_public_key" {
+  type = "string"
+}
+
 resource "aws_key_pair" "rancher_key" {
   key_name = "rancher"
-  public_key = "${file("/data/keys/rancher.pub")}"
+  public_key = "${var.rancher_public_key}"
 }
 
 resource "aws_instance" "rancher_master" {

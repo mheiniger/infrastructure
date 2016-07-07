@@ -18,6 +18,7 @@ cmd=${1%:*}
 env=${1##*:}
 args="${@:2}"
 envdir=$root/environments/$env
+tmpdir='/tmp'
 if [ "$cmd" == "$env" ]
   then
   print_help
@@ -33,10 +34,15 @@ checkdocker () {
 }
 
 create () {
-  if [ ! -f $envdir/keys/rancher ]; then
+  mkdir -p $envdir
+  touch $envdir/terraform.tfvars
+  if ! grep -q 'rancher_public_key' $envdir/terraform.tfvars; then
     echo "Creating rancher ssh key..."
-    mkdir -p $envdir/keys
-    ssh-keygen -t rsa -f $envdir/keys/rancher -N ''
+    mkdir -p $envdir
+    ssh-keygen -q -t rsa -f $tmpdir/rancher -N ''
+    echo "\nrancher_public_key=\"$(cat $tmpdir/rancher.pub)\"" >> $envdir/terraform.tfvars
+    echo -e "rancher_private_key=<<EOF\n$(cat $tmpdir/rancher)\nEOF" >> $envdir/terraform.tfvars
+    rm $tmpdir/rancher $tmpdir/rancher.pub
   fi
 }
 
