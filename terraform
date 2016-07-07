@@ -51,7 +51,7 @@ apply () {
 }
 
 destroy () {
-  terraform destroy $@ 0/structure
+  terraform destroy $@ /structure
 }
 
 config () {
