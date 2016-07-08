@@ -18,6 +18,11 @@ variable "rancher_public_key" {
   type = "string"
 }
 
+variable "rancher_private_key" {
+  type = "string"
+  default = ""
+}
+
 variable "cloudwatch_aws_region" {
   type = "string"
 }
@@ -143,7 +148,22 @@ resource "template_file" "cloud_init" {
     }
 }
 
-
 output "host" {
   value = "${aws_eip.rancher_master.public_ip}"
+}
+
+output "user" {
+  value = "rancher"
+}
+
+output "ssh" {
+  value = "ssh rancher@${aws_eip.rancher_master.public_ip}"
+}
+
+output "public_key" {
+  value = "${var.rancher_public_key}"
+}
+
+output "private_key" {
+  value = "${var.rancher_private_key}"
 }

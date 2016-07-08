@@ -65,6 +65,14 @@ config () {
   terraform output $@
 }
 
+connect () {
+  echo "$(config private_key)" > $tmpdir/rancher
+  chmod 600 $tmpdir/rancher
+  ssh-add $tmpdir/rancher 2>/dev/null
+  rm $tmpdir/rancher
+  $(echo "$(config ssh)" | tr '\r' ' ')
+}
+
 shift
 case "$cmd" in
     create)
@@ -77,8 +85,11 @@ case "$cmd" in
     config)
         config $args
         ;;
+    ssh)
+        connect $args
+        ;;
     terraform)
-        terraform $args
+        terraform $args /structure
         ;;
     *)
         print_help
