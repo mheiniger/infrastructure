@@ -46,19 +46,20 @@ resource "aws_instance" "rancher_master" {
   monitoring    = true
   user_data     = "${template_file.cloud_init.rendered}"
   key_name      = "${aws_key_pair.rancher_key.key_name}"
-  security_groups = ["${aws_security_group.rancher_master.name}"]
   associate_public_ip_address = true
+  vpc_security_group_ids = ["${aws_security_group.rancher_master.id}"]
+  subnet_id = "${var.vpc_subnet_id}"
 }
 
 resource "aws_eip" "rancher_master" {
   instance = "${aws_instance.rancher_master.id}"
-  vpc      = false
+  vpc      = true
 }
-
 
 resource "aws_security_group" "rancher_master" {
   name = "rancher_master"
   description = "Allow ports needed for rancher"
+  vpc_id = "${var.vpc_id}"
 
   egress {
     from_port = 0
@@ -130,7 +131,7 @@ resource "template_file" "cloud_init" {
       ssh_authorized_key = "${aws_key_pair.rancher_key.public_key}"
 
       # Database
-      database_host = "${aws_db_instance.rancher.address}"
+      database_host = "${var.rancher_db_host}"
       database_port = "${var.rancher_db_port}"
       database_name = "${var.rancher_db_name}"
       database_username = "${var.rancher_db_username}"
