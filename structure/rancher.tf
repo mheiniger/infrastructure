@@ -59,6 +59,7 @@ resource "aws_eip" "rancher_master" {
 resource "aws_security_group" "rancher_master" {
   name = "rancher_master"
   description = "Allow ports needed for rancher"
+  vpc_id = "${var.vpc_id}"
 
   egress {
     from_port = 0

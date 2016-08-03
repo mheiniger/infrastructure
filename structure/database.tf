@@ -35,6 +35,7 @@ variable "rancher_db_monitoring_interval" {
 resource "aws_security_group" "mysql_public" {
   name = "mysql_public"
   description = "Make mysql accessible from everywhere"
+  vpc_id = "${var.vpc_id}"
 
   egress {
     from_port = 3306
@@ -52,8 +53,10 @@ resource "aws_security_group" "mysql_public" {
 }
 
 
+
 resource "aws_db_instance" "rancher" {
   # Instance config
+  depends_on = ["aws_security_group.mysql_public"]
   identifier = "${var.rancher_db_instance_name}"
   availability_zone    = "${var.rancher_db_zone}"
   allocated_storage    = 10
@@ -63,6 +66,8 @@ resource "aws_db_instance" "rancher" {
   instance_class       = "${var.rancher_db_instance_class}"
   publicly_accessible  = true
   vpc_security_group_ids = ["${aws_security_group.mysql_public.id}"]
+  db_subnet_group_name = "${aws_db_subnet_group.default.id}"
+
 
   # not supported for db.t1.micro instance
   monitoring_interval = "${var.rancher_db_monitoring_interval}"
@@ -74,6 +79,11 @@ resource "aws_db_instance" "rancher" {
   password             = "${var.rancher_db_password}"
 }
 
+resource "aws_db_subnet_group" "default" {
+  name = "main_subnet_group"
+  description = "Our main group of subnets"
+  subnet_ids = ["${aws_subnet.subnet_1.id}", "${aws_subnet.subnet_2.id}"]
+}
 
 output "database_host" {
   value = "${aws_db_instance.rancher.endpoint}"
