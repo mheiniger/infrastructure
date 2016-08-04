@@ -40,6 +40,14 @@ resource "aws_key_pair" "rancher_key" {
   public_key = "${var.rancher_public_key}"
 }
 
+resource "aws_cloudwatch_log_group" "rancher" {
+  name = "rancher"
+}
+
+resource "aws_cloudwatch_log_group" "rancher-system" {
+  name = "rancher-system"
+}
+
 resource "aws_instance" "rancher_master" {
   ami           = "${var.rancher_os_ami}"
   instance_type = "${var.rancher_instance_type}"
