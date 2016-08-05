@@ -35,17 +35,17 @@ variable "cloudwatch_aws_secret_key" {
   type = "string"
 }
 
-resource "aws_key_pair" "rancher_key" {
-  key_name = "rancher"
-  public_key = "${var.rancher_public_key}"
-}
-
 resource "aws_cloudwatch_log_group" "rancher" {
   name = "rancher"
 }
 
 resource "aws_cloudwatch_log_group" "rancher-system" {
   name = "rancher-system"
+}
+
+resource "aws_key_pair" "rancher_key" {
+  key_name = "rancher"
+  public_key = "${var.rancher_public_key}"
 }
 
 resource "aws_instance" "rancher_master" {
