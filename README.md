@@ -36,6 +36,10 @@ aws_access_key="<KEY>"
 aws_secret_key="<SECRET>"
 aws_region="eu-west-1"
 
+cloudwatch_aws_access_key="<KEY>"
+cloudwatch_aws_secret_key="<SECRET>"
+cloudwatch_aws_region="eu-west-1"
+
 # Database
 rancher_db_instance_name="rancher-production"
 rancher_db_instance_class ="db.t2.micro"
