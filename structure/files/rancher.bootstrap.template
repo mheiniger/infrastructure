@@ -40,7 +40,7 @@ rancher:
         - io.rancher.os.after=network
 
     proxy:
-      image: abiosoft/caddy
+      image: abiosoft/caddy:0.8.3
       restart: always
       volumes:
         - /etc/Caddyfile:/etc/Caddyfile
