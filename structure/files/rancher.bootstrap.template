@@ -11,10 +11,8 @@ write_files:
       ${letsencrypt}
 
       proxy  / rancher:8080 {
+        transparent
         websocket
-        proxy_header Host {host}
-        proxy_header X-Real-IP {remote}
-        proxy_header X-Forwarded-Proto {scheme}
       }
 
       log stdout
@@ -40,7 +38,7 @@ rancher:
         - io.rancher.os.after=network
 
     proxy:
-      image: abiosoft/caddy:0.8.3
+      image: abiosoft/caddy:0.9.2
       restart: always
       volumes:
         - /etc/Caddyfile:/etc/Caddyfile

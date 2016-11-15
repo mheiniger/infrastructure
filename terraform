@@ -48,7 +48,7 @@ create () {
 
 terraform () {
   checkdocker
-  docker run --rm -it -v $envdir:/data -v $root/structure:/structure uzyexe/terraform $@
+  docker run --rm -it -v $envdir:/data -v $root/structure:/structure uzyexe/terraform:v0.7.0 $@
 }
 
 apply () {

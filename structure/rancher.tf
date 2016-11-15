@@ -52,7 +52,7 @@ resource "aws_instance" "rancher_master" {
   ami           = "${var.rancher_os_ami}"
   instance_type = "${var.rancher_instance_type}"
   monitoring    = true
-  user_data     = "${template_file.cloud_init.rendered}"
+  user_data     = "${data.template_file.cloud_init.rendered}"
   key_name      = "${aws_key_pair.rancher_key.key_name}"
   associate_public_ip_address = true
   vpc_security_group_ids = ["${aws_security_group.rancher_master.id}"]
@@ -130,7 +130,7 @@ variable "letsencrypt" {
 }
 
 # User-data template
-resource "template_file" "cloud_init" {
+data "template_file" "cloud_init" {
     template = "${file("${path.module}/files/rancher.bootstrap.template")}"
 
     vars {
